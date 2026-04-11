@@ -8,7 +8,7 @@ import { SkeletonCard } from '../components/ui/Skeleton'
 import { getItem, simulateDelay } from '../lib/storage'
 import { STORAGE_KEYS, DOC_TYPE_LABELS, STATUS_LABELS, DocumentStatus } from '../lib/constants'
 import type { DocRecord } from '../lib/constants'
-import { formatDate, formatDateTime, formatMoney, cn } from '../lib/utils'
+import { formatDateTime, formatMoney, cn } from '../lib/utils'
 import { useToast } from '../components/ui/Toast'
 import MockPdfPreview from '../components/documents/MockPdfPreview'
 

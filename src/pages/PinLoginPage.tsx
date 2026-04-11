@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Lock, Fingerprint, ChevronLeft, FileCheck } from 'lucide-react'
+import { Fingerprint, ChevronLeft } from 'lucide-react'
 import { getItem, setAuth } from '../lib/storage'
 import { STORAGE_KEYS } from '../lib/constants'
 import type { UserProfile } from '../lib/constants'

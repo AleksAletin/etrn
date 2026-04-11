@@ -4,7 +4,7 @@ import { CheckCircle, XCircle, Loader2, FileText, RotateCcw } from 'lucide-react
 import Button from '../components/ui/Button'
 import Card from '../components/ui/Card'
 import { getItem, setItem, shouldSimulateError } from '../lib/storage'
-import { STORAGE_KEYS, DocumentStatus, STATUS_COLORS } from '../lib/constants'
+import { STORAGE_KEYS, DocumentStatus } from '../lib/constants'
 import type { DocRecord, ActivityLogEntry } from '../lib/constants'
 import { generateId, cn } from '../lib/utils'
 
@@ -46,7 +46,7 @@ export default function BulkSigningPage() {
           status: 'waiting' as const,
         }
       })
-      .filter((s): s is DocSignState => s !== null)
+      .filter((s): s is NonNullable<typeof s> & DocSignState => s !== null)
 
     setDocStates(states)
   }, []) // eslint-disable-line react-hooks/exhaustive-deps

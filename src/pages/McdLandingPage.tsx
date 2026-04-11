@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { Shield, Upload, CheckCircle, FileText, Copy, Check, AlertTriangle, X } from 'lucide-react'
+import { Shield, Upload, CheckCircle, FileText, Copy, Check } from 'lucide-react'
 import Button from '../components/ui/Button'
 import Card from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
@@ -24,7 +24,7 @@ export default function McdLandingPage() {
   const user = getItem<UserProfile>(STORAGE_KEYS.USER)
 
   const [step, setStep] = useState<Step>(linkId && hasLinkedMcd ? 'view' : 'upload')
-  const [uploading, setUploading] = useState(false)
+  const [, setUploading] = useState(false)
   const [copied, setCopied] = useState(false)
 
   // Form fields for new MCD

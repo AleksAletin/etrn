@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { ChevronLeft, CheckCircle, Loader2, KeyRound, QrCode, FileText, Shield, AlertCircle, Clock, Smartphone, Download } from 'lucide-react'
+import { ChevronLeft, CheckCircle, Loader2, KeyRound, QrCode, FileText, Shield, Smartphone, Download } from 'lucide-react'
 import Button from '../components/ui/Button'
 import Input from '../components/ui/Input'
 import Card from '../components/ui/Card'
@@ -79,13 +79,12 @@ export default function CertIssuancePage() {
     city: 'г. Москва',
     clientProfileId: '1',
   })
-  const [submitting, setSubmitting] = useState(false)
+  const [, setSubmitting] = useState(false)
   const [applicationId, setApplicationId] = useState<string | null>(null)
   const [waitingStatusIdx, setWaitingStatusIdx] = useState(0)
-  const [certIssued, setCertIssued] = useState(false)
+  const [, setCertIssued] = useState(false)
   const [errors, setErrors] = useState<Partial<Record<keyof AnketaData, string>>>({})
   const waitingTimerRef = useRef<number | null>(null)
-  const qrCanvasRef = useRef<HTMLCanvasElement>(null)
 
   const updateAnketa = useCallback((key: keyof AnketaData, value: string) => {
     // Apply masks

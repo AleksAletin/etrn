@@ -167,7 +167,7 @@ export default function AuthPage() {
         setItem(STORAGE_KEYS.NOTIFICATIONS, seedNotifications())
         setItem(STORAGE_KEYS.TRIPS, seedTrips())
       }
-      const user = getItem(STORAGE_KEYS.USER)
+      const user = getItem<{ onboardingCompleted?: boolean }>(STORAGE_KEYS.USER)
       if (!user) {
         setItem(STORAGE_KEYS.USER, { ...defaultUser, phone: digits, onboardingCompleted: false })
       }

@@ -11,23 +11,6 @@ function formatAmount(v: number): string {
   return v.toLocaleString('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 })
 }
 
-function findDocByQuery(docs: DocRecord[], query: string): DocRecord | undefined {
-  const q = query.trim().toLowerCase()
-  if (!q) return undefined
-  // exact match by full number
-  const exact = docs.find(d => d.number.toLowerCase() === q)
-  if (exact) return exact
-  // match by trailing digits (e.g. "001" matches "ЭТрН-2026-001")
-  const byTail = docs.find(d => {
-    const parts = d.number.split('-')
-    const tail = parts[parts.length - 1]
-    return tail === q
-  })
-  if (byTail) return byTail
-  // partial match anywhere in number
-  return docs.find(d => d.number.toLowerCase().includes(q))
-}
-
 export default function QrScannerPage() {
   const navigate = useNavigate()
   const [state, setState] = useState<ScanState>('scanning')

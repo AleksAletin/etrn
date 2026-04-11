@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FileText, CheckCircle, AlertTriangle, CreditCard, Info, BellOff } from 'lucide-react'
+import { FileText, CheckCircle, AlertTriangle, CreditCard, Info, BellOff, UserCheck } from 'lucide-react'
 import type { AppNotification, NotificationType } from '../lib/constants'
 import { STORAGE_KEYS } from '../lib/constants'
 import { getItem, setItem } from '../lib/storage'
@@ -15,6 +15,7 @@ const ICON_MAP: Record<NotificationType, typeof FileText> = {
   mcd_expiry: AlertTriangle,
   payment: CreditCard,
   system: Info,
+  assigned: UserCheck,
 }
 
 const ICON_COLORS: Record<NotificationType, { bg: string; text: string }> = {
@@ -24,6 +25,7 @@ const ICON_COLORS: Record<NotificationType, { bg: string; text: string }> = {
   mcd_expiry: { bg: 'bg-orange-50 dark:bg-orange-900/20', text: 'text-orange-600' },
   payment: { bg: 'bg-blue-50 dark:bg-blue-900/20', text: 'text-blue-600' },
   system: { bg: 'bg-gray-100 dark:bg-gray-800', text: 'text-gray-600 dark:text-gray-400' },
+  assigned: { bg: 'bg-blue-50 dark:bg-blue-900/20', text: 'text-blue-600' },
 }
 
 const BORDER_COLORS: Record<NotificationType, string> = {
@@ -33,6 +35,7 @@ const BORDER_COLORS: Record<NotificationType, string> = {
   mcd_expiry: 'border-l-orange-500',
   payment: 'border-l-blue-500',
   system: 'border-l-gray-400',
+  assigned: 'border-l-blue-500',
 }
 
 function formatRelativeTime(iso: string): string {

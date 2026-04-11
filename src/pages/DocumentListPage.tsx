@@ -65,7 +65,6 @@ export default function DocumentListPage() {
 
   // Swipe state
   const { toast } = useToast()
-  const [swipedId, setSwipedId] = useState<string | null>(null)
   const touchRef = useRef<{ startX: number; startY: number; id: string } | null>(null)
 
   // Sync filter state to URL search params
