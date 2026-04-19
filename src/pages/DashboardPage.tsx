@@ -98,8 +98,17 @@ export default function DashboardPage() {
   return (
     <div className="p-4 space-y-5">
       {/* Greeting */}
-      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100">
-        {user?.name ? `${user.name.split(' ')[1] || user.name.split(' ')[0]}, привет!` : 'Привет!'}
+      <h2 className="text-xl font-bold text-gray-900 dark:text-gray-100 truncate">
+        {(() => {
+          const name = user?.name?.trim() ?? ''
+          if (!name) return 'Привет!'
+          // Берём имя (второе слово ФИО) или фамилию, если имени нет
+          const parts = name.split(/\s+/).filter(Boolean)
+          const firstName = parts[1] || parts[0] || ''
+          // Ограничиваем длину — защита от длинных названий
+          const display = firstName.length > 30 ? firstName.slice(0, 28) + '…' : firstName
+          return `${display}, привет!`
+        })()}
       </h2>
 
       {/* Expiry warnings */}

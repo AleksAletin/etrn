@@ -18,20 +18,21 @@ export default function TopBar({ title, showBack, onMenuClick }: TopBarProps) {
 
   return (
     <header className="sticky top-0 z-30 bg-white/80 dark:bg-gray-900/80 backdrop-blur-xl border-b border-gray-100/80 dark:border-gray-800/50">
-      <div className="flex items-center justify-between h-14 px-4">
+      <div className="flex items-center justify-between h-14 px-4 gap-2">
         <button
           onClick={showBack ? () => navigate(-1) : onMenuClick}
           aria-label={showBack ? 'Назад' : 'Меню'}
-          className="w-10 h-10 flex items-center justify-center rounded-xl active:bg-gray-100 dark:active:bg-gray-800 -ml-1 transition-colors"
+          type="button"
+          className="relative z-10 w-10 h-10 flex items-center justify-center rounded-xl active:bg-gray-100 dark:active:bg-gray-800 -ml-1 transition-colors shrink-0"
         >
           {showBack ? (
-            <ChevronLeft className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+            <ChevronLeft className="h-6 w-6 text-gray-700 dark:text-gray-300 pointer-events-none" />
           ) : (
-            <Menu className="h-6 w-6 text-gray-700 dark:text-gray-300" />
+            <Menu className="h-6 w-6 text-gray-700 dark:text-gray-300 pointer-events-none" />
           )}
         </button>
-        <h1 className="text-[17px] font-semibold text-gray-900 dark:text-gray-100 truncate mx-3">{title}</h1>
-        <div className="flex items-center gap-0.5">
+        <h1 className="text-[17px] font-semibold text-gray-900 dark:text-gray-100 truncate min-w-0 flex-1 text-center">{title}</h1>
+        <div className="flex items-center gap-0.5 shrink-0">
           <button
             onClick={() => navigate('/notifications')}
             aria-label="Уведомления"

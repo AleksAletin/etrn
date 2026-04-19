@@ -65,14 +65,14 @@ export default function BurgerMenu({ open, onClose, user, subscription }: Burger
         style={{ animation: 'slideInLeft 0.2s ease-out' }}
       >
         {/* Header */}
-        <div className="flex items-start justify-between p-5 pb-4 border-b border-gray-100 dark:border-gray-800/50">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900/40 flex items-center justify-center">
+        <div className="flex items-start justify-between gap-2 p-5 pb-4 border-b border-gray-100 dark:border-gray-800/50">
+          <div className="flex items-center gap-3 min-w-0 flex-1">
+            <div className="w-12 h-12 rounded-full bg-brand-100 dark:bg-brand-900/40 flex items-center justify-center shrink-0">
               <User className="h-6 w-6 text-brand-700 dark:text-brand-400" />
             </div>
-            <div className="min-w-0">
-              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate">{user?.name ?? 'Пользователь'}</p>
-              <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.company ?? ''}</p>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold text-gray-900 dark:text-gray-100 truncate" title={user?.name ?? ''}>{user?.name ?? 'Пользователь'}</p>
+              <p className="text-xs text-gray-500 dark:text-gray-400 truncate" title={user?.company ?? ''}>{user?.company ?? ''}</p>
               {subscription && (
                 <Badge variant={subBadge[subscription.status]} className="mt-1">
                   {subLabel[subscription.status]}
@@ -80,8 +80,13 @@ export default function BurgerMenu({ open, onClose, user, subscription }: Burger
               )}
             </div>
           </div>
-          <button onClick={onClose} className="p-1.5 -mr-1 -mt-1 rounded-xl active:bg-gray-100 dark:active:bg-gray-800 transition-colors">
-            <X className="h-5 w-5 text-gray-400" />
+          <button
+            onClick={onClose}
+            aria-label="Закрыть меню"
+            type="button"
+            className="p-1.5 rounded-xl active:bg-gray-100 dark:active:bg-gray-800 transition-colors shrink-0"
+          >
+            <X className="h-5 w-5 text-gray-400 pointer-events-none" />
           </button>
         </div>
 

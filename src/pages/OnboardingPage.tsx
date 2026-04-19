@@ -94,12 +94,25 @@ export default function OnboardingPage() {
         company: '',
         onboardingCompleted: false,
       }
+      // Извлекаем ЧИСТОЕ ФИО для name:
+      // - ЮЛ: управляющий (уже ФИО)
+      // - ИП: из "Индивидуальный предприниматель ФИО" убираем префикс
+      // - ФЛ: уже ФИО
+      const cleanName = (() => {
+        if (dadata.kind === 'ul') return dadata.management ?? ''
+        if (dadata.kind === 'ip') {
+          return dadata.name.replace(/^Индивидуальный предприниматель\s+/i, '').trim()
+        }
+        return dadata.name
+      })()
+
       const user: UserProfile = {
         ...base,
         inn: dadata.inn,
         kind: dadata.kind,
-        name: dadata.kind === 'ul' ? (dadata.management ?? '') : dadata.name,
-        company: dadata.shortName || dadata.name,
+        name: cleanName,
+        // company — обязательно shortName (ООО «...»), никогда полное название
+        company: dadata.shortName || dadata.name.slice(0, 60),
         ogrn: dadata.ogrn,
         email,
         onboardingCompleted: true,

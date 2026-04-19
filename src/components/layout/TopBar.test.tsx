@@ -34,6 +34,17 @@ describe('TopBar', () => {
     expect(screen.getByLabelText('Профиль')).toBeInTheDocument()
   })
 
+  it('не теряет кликабельность Menu-кнопки при длинном заголовке', () => {
+    const longTitle = 'Очень Длинный Заголовок Страницы Который Должен Быть Обрезан Truncate'
+    const onMenuClick = vi.fn()
+    renderWithRouter(<TopBar title={longTitle} onMenuClick={onMenuClick} />)
+    const menuBtn = screen.getByLabelText('Меню')
+    // Кнопка существует и кликабельна
+    expect(menuBtn).toBeInTheDocument()
+    fireEvent.click(menuBtn)
+    expect(onMenuClick).toHaveBeenCalled()
+  })
+
   it('показывает счётчик непрочитанных уведомлений', () => {
     localStorage.setItem(
       'etrn_notifications',

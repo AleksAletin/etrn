@@ -48,6 +48,30 @@ describe('BurgerMenu', () => {
     expect(onClose).toHaveBeenCalled()
   })
 
+  it('не ломается при очень длинном ФИО и названии компании', () => {
+    const longUser = {
+      ...testUser,
+      name: 'Александрович-Петрович Константинополевский Владимир Всеволодович',
+      company: 'Общество с ограниченной ответственностью «Супер-Длинное-Название-Компании-Транспортной»',
+    }
+    renderWithRouter(
+      <BurgerMenu open={true} onClose={() => {}} user={longUser} subscription={null} />,
+    )
+    // Панель должна быть в DOM и рендериться без падения
+    expect(screen.getByTestId('burger-panel')).toBeInTheDocument()
+    // Все пункты меню должны быть доступны (не обрезаны ФИО)
+    expect(screen.getByText('Главная')).toBeInTheDocument()
+    expect(screen.getByText('Настройки')).toBeInTheDocument()
+  })
+
+  it('не ломается когда user = null', () => {
+    renderWithRouter(
+      <BurgerMenu open={true} onClose={() => {}} user={null} subscription={null} />,
+    )
+    expect(screen.getByTestId('burger-panel')).toBeInTheDocument()
+    expect(screen.getByText('Пользователь')).toBeInTheDocument()
+  })
+
   it('показывает статус подписки если передан', () => {
     renderWithRouter(
       <BurgerMenu
