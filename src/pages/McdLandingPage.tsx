@@ -1,6 +1,6 @@
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
-import { Shield, Upload, CheckCircle, FileText, Copy, Check, Send, UserCheck, AlertCircle, X } from 'lucide-react'
+import { Shield, Upload, CheckCircle, FileText, Copy, Check, Send, UserCheck, AlertCircle, X, Loader2 } from 'lucide-react'
 import Button from '../components/ui/Button'
 import Card from '../components/ui/Card'
 import Badge from '../components/ui/Badge'
@@ -11,26 +11,51 @@ import { formatDate, cn } from '../lib/utils'
 import { useToast } from '../components/ui/Toast'
 import { parseMcdFile, parsedToMcd } from '../lib/mockMcdParser'
 import type { ParsedMcd } from '../lib/mockMcdParser'
+import InviteLanding from '../components/mcd/InviteLanding'
+import { validateInvite, consumeInvite } from '../lib/mcdInvite'
+import type { InvitePayload, InviteValidationResult } from '../lib/mcdInvite'
 
-type Step = 'choose' | 'upload' | 'preview' | 'verify' | 'done' | 'view'
+type Step = 'choose' | 'upload' | 'preview' | 'verify' | 'done' | 'view' | 'invite-landing'
 
 export default function McdLandingPage() {
   const [searchParams] = useSearchParams()
   const navigate = useNavigate()
   const { toast } = useToast()
   const linkId = searchParams.get('id')
+  const inviteToken = searchParams.get('invite')
   const fileRef = useRef<HTMLInputElement>(null)
 
   const existingMcds = getItem<Mcd[]>(STORAGE_KEYS.MCD) ?? []
   const hasLinkedMcd = existingMcds.some(m => m.status === 'linked')
   const user = getItem<UserProfile>(STORAGE_KEYS.USER)
 
-  // Первый экран: если есть МЧД и пришли по ссылке — view; иначе choose
-  const initialStep: Step = linkId && hasLinkedMcd ? 'view' : 'choose'
+  // Первый экран:
+  //  - с токеном invite → landing для получателя (или страница ошибки при invalid)
+  //  - есть МЧД + ?id=... → view
+  //  - иначе → choose
+  const initialStep: Step = inviteToken
+    ? 'invite-landing'
+    : (linkId && hasLinkedMcd ? 'view' : 'choose')
   const [step, setStep] = useState<Step>(initialStep)
   const [copied, setCopied] = useState(false)
   const [parsed, setParsed] = useState<ParsedMcd | null>(null)
   const [parseError, setParseError] = useState<string>('')
+
+  // Валидация invite-токена (async). Держим в стейте результат.
+  const [inviteValidation, setInviteValidation] = useState<InviteValidationResult | null>(null)
+  const [invitePayload, setInvitePayload] = useState<InvitePayload | null>(null)
+
+  useEffect(() => {
+    if (!inviteToken) return
+    let cancelled = false
+    ;(async () => {
+      const result = await validateInvite(inviteToken)
+      if (cancelled) return
+      setInviteValidation(result)
+      if (result.valid) setInvitePayload(result.invite)
+    })()
+    return () => { cancelled = true }
+  }, [inviteToken])
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
@@ -66,10 +91,14 @@ export default function McdLandingPage() {
   const handleAttach = () => {
     if (!parsed) return
     setStep('verify')
-    setTimeout(() => {
+    setTimeout(async () => {
       const mcd = parsedToMcd(parsed)
       const current = getItem<Mcd[]>(STORAGE_KEYS.MCD) ?? []
       setItem(STORAGE_KEYS.MCD, [...current, mcd])
+      // Если пришли по invite — одноразовая ссылка «сгорает»
+      if (inviteToken) {
+        try { await consumeInvite(inviteToken) } catch { /* no-op */ }
+      }
       setStep('done')
     }, 2500)
   }
@@ -105,6 +134,26 @@ export default function McdLandingPage() {
   }
 
   const nameMatches = parsed?.trustedPerson === user?.name
+
+  // === Invite-landing (получатель пришёл по защищённой ссылке) ===
+  if (step === 'invite-landing') {
+    // Ждём результата асинхронной валидации
+    if (!inviteValidation) {
+      return (
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-brand-50 via-white to-white dark:from-brand-950/40 dark:via-gray-900 dark:to-gray-900">
+          <Loader2 className="h-10 w-10 text-brand-600 animate-spin mb-4" />
+          <p className="text-sm text-gray-500 dark:text-gray-400">Проверяем ссылку...</p>
+        </div>
+      )
+    }
+    return (
+      <InviteLanding
+        invite={invitePayload ?? undefined}
+        invalidReason={inviteValidation.valid ? undefined : inviteValidation.reason}
+        onContinue={() => setStep('upload')}
+      />
+    )
+  }
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-800/50">
