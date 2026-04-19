@@ -79,6 +79,9 @@ function migrateUser(legacy: LegacyUser): LegacyUser {
 }
 
 export function runMigrations(): void {
+  // Защита от SSR / environment без localStorage (на всякий случай)
+  if (typeof localStorage === 'undefined' || typeof localStorage.getItem !== 'function') return
+
   const storedVersion = Number(localStorage.getItem(MIGRATION_VERSION_KEY)) || 0
   if (storedVersion >= CURRENT_VERSION) return
 

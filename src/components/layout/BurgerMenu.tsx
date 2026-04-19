@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 import { X, LayoutDashboard, FileText, Archive, BarChart3, User, Settings, LogOut } from 'lucide-react'
-import { cn } from '../../lib/utils'
 import Badge from '../ui/Badge'
 import type { UserProfile, Subscription } from '../../lib/constants'
 
@@ -46,22 +45,24 @@ export default function BurgerMenu({ open, onClose, user, subscription }: Burger
     onClose()
   }
 
+  // Условный рендер: если меню закрыто, вообще не рендерим DOM.
+  // Это надёжнее чем transform, который в Tailwind v4 иногда не скрывает
+  // элементы за экран и перекрывает кнопки TopBar.
+  if (!open) return null
+
   return (
     <>
       {/* Overlay */}
       <div
-        className={cn(
-          'fixed inset-0 z-40 bg-black/30 dark:bg-black/50 backdrop-blur-[2px] transition-opacity duration-300',
-          open ? 'opacity-100' : 'opacity-0 pointer-events-none',
-        )}
+        data-testid="burger-overlay"
+        className="fixed inset-0 z-40 bg-black/30 dark:bg-black/50 backdrop-blur-[2px] animate-fade-in"
         onClick={onClose}
       />
       {/* Panel */}
       <div
-        className={cn(
-          'fixed top-0 left-0 bottom-0 z-50 w-[280px] bg-white dark:bg-gray-900 shadow-2xl transition-transform duration-300 ease-out flex flex-col',
-          open ? 'translate-x-0' : '-translate-x-full',
-        )}
+        data-testid="burger-panel"
+        className="fixed top-0 left-0 bottom-0 z-50 w-[280px] bg-white dark:bg-gray-900 shadow-2xl flex flex-col"
+        style={{ animation: 'slideInLeft 0.2s ease-out' }}
       >
         {/* Header */}
         <div className="flex items-start justify-between p-5 pb-4 border-b border-gray-100 dark:border-gray-800/50">

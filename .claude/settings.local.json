@@ -68,7 +68,11 @@
       "Bash(python3 /tmp/apply_edits.py)",
       "Bash(python3 /tmp/edit_option.py)",
       "Bash(python3 '/Users/aletinaleksandr/Library/Application Support/Claude/local-agent-mode-sessions/skills-plugin/a66a8acd-900c-497f-aa97-9dfecf737638/d13532b6-07f5-4bfb-9623-cbfae2a6b39b/skills/docx/scripts/office/pack.py' /tmp/tair_unpack/ /Users/aletinaleksandr/Downloads/ДОГОВОР_ЛП_КУБ_правки_разработчиков.docx --original /tmp/tair_work.docx)",
-      "Bash(python3 /tmp/more_edits.py)"
+      "Bash(python3 /tmp/more_edits.py)",
+      "Bash(npm i *)",
+      "Bash(npx vitest *)",
+      "Bash(sed -i '' 's|if \\(typeof globalThis.document.*|// register always|' /Users/aletinaleksandr/ETRN/src/test/setup.ts)",
+      "Bash(sed -i '' 's|^}$|// closed|' /Users/aletinaleksandr/ETRN/src/test/setup.ts)"
     ]
   }
 }

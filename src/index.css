@@ -109,6 +109,12 @@ body {
   animation: fadeIn 0.2s ease-out;
 }
 
+/* ── Slide in from left (бургер-меню) ── */
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
 /* ── Page transition ── */
 @keyframes pageEnter {
   from { opacity: 0; transform: translateY(8px); }
